@@ -152,22 +152,8 @@ func _ready() -> void:
 
 
 func _limpiar_escena_demo() -> void:
-	for h in get_parent().get_children():
-		var es_demo: bool = h.name == "Example"
-		var scr = h.get_script()
-		if scr != null and str(scr.resource_path).ends_with("example.gd"):
-			es_demo = true
-		if es_demo:
-			h.process_mode = Node.PROCESS_MODE_DISABLED
-			h.queue_free()
-	var sol_demo := _cam.get_node_or_null("Sun")
-	if sol_demo:
-		sol_demo.queue_free()
 	if menu_camera and menu_camera != _cam:
 		menu_camera.queue_free()
-	var viejo := _planet.get_node_or_null("LandingMarker")
-	if viejo:
-		viejo.queue_free()
 
 
 func _preparar_ambiente() -> void:
@@ -262,6 +248,8 @@ func aplicar_lod() -> void:
 	_planet.lod_threshold_deg = LOD_UMBRAL[c]
 	_planet.split_budget = LOD_PRESUPUESTO[c]
 	_planet._compute_lod_thresholds()
+	if _mat_terreno != null:
+		_mat_terreno.set_shader_parameter("calidad_shader", c)
 
 
 func _crear_pantalla_titulo() -> void:

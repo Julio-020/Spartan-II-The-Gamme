@@ -1,27 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Texture2D" path="res://textures/stars.jpg" id="4_1bvp3"]
-[ext_resource type="Script" path="res://landing_marker.gd" id="5_lquwl"]
 [ext_resource type="Script" path="res://scripts/planet.gd" id="5_planet"]
 [ext_resource type="Script" path="res://game_manager.gd" id="6_7mycd"]
 [ext_resource type="Script" path="res://scripts/planet_camera.gd" id="6_planet_camera"]
-[ext_resource type="Script" path="res://scripts/example.gd" id="7_example"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1lj4"]
-albedo_color = Color(0, 1, 0.8, 1)
-emission_enabled = true
-emission = Color(0, 1, 0.8, 1)
-emission_energy_multiplier = 1.77
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_xrivr"]
-material = SubResource("StandardMaterial3D_b1lj4")
-top_radius = 0.0
-bottom_radius = 2.0
-height = 5.0
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_13qdw"]
-height = 3.8984375
-radius = 2.7983398
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("4_1bvp3")
@@ -51,20 +33,6 @@ script = ExtResource("5_planet")
 radius = 3398.5
 terrain_height = 21.1
 atmosphere_height = 110.0
-
-[node name="LandingMarker" type="Area3D" parent="Planet" unique_id=1466600496]
-transform = Transform3D(500, 0, 0, 0, 500, 0, 0, 0, 500, 0, 3400, 0)
-script = ExtResource("5_lquwl")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Planet/LandingMarker" unique_id=620242809]
-mesh = SubResource("CylinderMesh_xrivr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/LandingMarker" unique_id=918397428]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94921875, 0)
-shape = SubResource("CylinderShape3D_13qdw")
-
-[node name="Example" type="Node" parent="." unique_id=1306506341]
-script = ExtResource("7_example")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2039396142]
 environment = SubResource("Environment_272bh")

@@ -107,12 +107,6 @@ static func frase_final(e: Dictionary) -> String:
 	return "Otro día de trabajo en Marte. El polvo ya se asienta."
 
 
-static func texto_entrada(e: Dictionary) -> String:
-	var partes: Array[String] = [titulo_entrada(e)]
-	partes.append_array(lineas_entrada(e))
-	return "\n".join(PackedStringArray(partes))
-
-
 static func texto_exportable() -> String:
 	_asegurar()
 	var s := Idioma.t("BITÁCORA DEL PILOTO · SPARTANS II") + "\n\n"

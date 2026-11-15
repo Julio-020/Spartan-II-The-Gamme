@@ -215,11 +215,6 @@ static func analisis_hechos() -> int:
 	return int(_d["analisis"])
 
 
-static func analisis_perfectos() -> int:
-	_asegurar()
-	return int(_d["perfectos"])
-
-
 static func registrar_analisis(perfecto: bool) -> void:
 	_asegurar()
 	_d["analisis"] = int(_d["analisis"]) + 1

@@ -5,6 +5,9 @@
 shader_type spatial;
 render_mode unshaded, cull_back;
 
+group_uniforms rendimiento;
+uniform int calidad_shader : hint_range(0, 2) = 2;
+
 group_uniforms lighting;
 uniform bool compute_normals = true;
 uniform float ambient_light : hint_range(0.0, 0.6) = 0.004;
@@ -305,19 +308,10 @@ vec3 elevation_color(float elev) {
 }
 
 // Triplanar texture sampling — projects texture from 3 axes using sphere-local coordinates.
-vec3 triplanar(sampler2D tex, vec3 pos, vec3 normal) {
-	vec3 blend = abs(normal);
-	blend = pow(blend, vec3(4.0)); // sharpen blending to reduce stretching
-	blend /= (blend.x + blend.y + blend.z);
-
-	vec2 uv_x = pos.yz * texture_scale;
-	vec2 uv_y = pos.xz * texture_scale;
-	vec2 uv_z = pos.xy * texture_scale;
-
-	vec3 sx = texture(tex, uv_x).rgb;
-	vec3 sy = texture(tex, uv_y).rgb;
-	vec3 sz = texture(tex, uv_z).rgb;
-
+vec3 triplanar(sampler2D tex, vec3 pos, vec3 blend, vec3 dx, vec3 dy) {
+	vec3 sx = textureGrad(tex, pos.yz * texture_scale, dx.yz * texture_scale, dy.yz * texture_scale).rgb;
+	vec3 sy = textureGrad(tex, pos.xz * texture_scale, dx.xz * texture_scale, dy.xz * texture_scale).rgb;
+	vec3 sz = textureGrad(tex, pos.xy * texture_scale, dx.xy * texture_scale, dy.xy * texture_scale).rgb;
 	return sx * blend.x + sy * blend.y + sz * blend.z;
 }
 
@@ -361,20 +355,18 @@ vec2 cuarteado(vec3 p) {
 
 void fragment() {
 	// Per-pixel color from noise (sharp biome boundaries even on coarse LOD)
-	float elev = compute_noise(sphere_pos);
+	float elev = calidad_shader >= 2 ? compute_noise(sphere_pos) : real_elevation;
 	vec3 base_color = elevation_color(elev);
+	float dist_cam = length(VERTEX);
+	vec3 dtx = dFdx(tex_pos);
+	vec3 dty = dFdy(tex_pos);
 
-	if (textures_enabled) {
+	if (textures_enabled && dist_cam < texture_far) {
 		vec3 norm = normalize(vertex_normal);
 		float slope = vertex_slope;
 
-		// Sample textures via triplanar using world_position (small values near camera
-		// thanks to origin shifting — gives precise UVs and correct mipmap selection)
-		vec3 c_sand = triplanar(tex_sand, tex_pos, norm);
-		vec3 c_grass = triplanar(tex_grass, tex_pos, norm);
-		vec3 c_ground = triplanar(tex_ground, tex_pos, norm);
-		vec3 c_gravel = triplanar(tex_gravel, tex_pos, norm);
-		vec3 c_snow = triplanar(tex_snow, tex_pos, norm);
+		vec3 blend = pow(abs(norm), vec3(4.0));
+		blend /= (blend.x + blend.y + blend.z);
 
 		// Splatting weights based on elevation (sea_n = 0.05 boundary)
 		float sea_n = 0.05;
@@ -387,6 +379,17 @@ void fragment() {
 		float w_snow = smoothstep(0.65, 0.85, land_elev);
 		float w_gravel = smoothstep(slope_threshold - slope_blend, slope_threshold + slope_blend, slope);
 
+		vec3 c_sand = vec3(0.0);
+		vec3 c_grass = vec3(0.0);
+		vec3 c_ground = vec3(0.0);
+		vec3 c_gravel = vec3(0.0);
+		vec3 c_snow = vec3(0.0);
+		if (w_sand > 0.004) c_sand = triplanar(tex_sand, tex_pos, blend, dtx, dty);
+		if (w_grass > 0.004) c_grass = triplanar(tex_grass, tex_pos, blend, dtx, dty);
+		if (w_ground > 0.004) c_ground = triplanar(tex_ground, tex_pos, blend, dtx, dty);
+		if (w_snow > 0.004) c_snow = triplanar(tex_snow, tex_pos, blend, dtx, dty);
+		if (w_gravel > 0.004) c_gravel = triplanar(tex_gravel, tex_pos, blend, dtx, dty);
+
 		// Gravel overrides on steep slopes
 		float flat_total = w_sand + w_grass + w_ground + w_snow + 0.001;
 		vec3 flat_color = (c_sand * w_sand + c_grass * w_grass + c_ground * w_ground + c_snow * w_snow) / flat_total;
@@ -394,7 +397,7 @@ void fragment() {
 		vec3 terrain_color = mix(flat_color, c_gravel, w_gravel) * texture_tint;
 
 		// Distance-based blend: textures close up, elevation color far away
-		float dist = length(VERTEX); // distance from camera in view space
+		float dist = dist_cam;
 		float tex_blend = 1.0 - smoothstep(texture_near, texture_far, dist);
 
 		// Ocean stays as elevation color (no texture)
@@ -404,13 +407,13 @@ void fragment() {
 
 	// ---- Relieve del suelo marciano ----
 	float luz_extra = 0.0;
-	if (suelo_detalle) {
-		float cam_d = length(VERTEX);
+	if (suelo_detalle && calidad_shader >= 1) {
+		float cam_d = dist_cam;
 		vec3 up_s = normalize(sphere_pos);
 		// manchas grandes: zonas más oscuras (roca basáltica) y más claras (polvo), con un tinte rojizo
 		float m1 = noise3d(sphere_pos * 5.0 + vec3(11.0, 3.0, 7.0));
 		float m2 = noise3d(sphere_pos * 23.0 + vec3(5.0, 19.0, 2.0));
-		float m3 = noise3d(sphere_pos * 90.0 + vec3(1.0, 8.0, 4.0));
+		float m3 = calidad_shader >= 2 ? noise3d(sphere_pos * 90.0 + vec3(1.0, 8.0, 4.0)) : 0.0;
 		float fade_m = 1.0 - smoothstep(60.0, 400.0, cam_d) * 0.6;
 		float tono = 1.0 + suelo_manchas * (m1 * 1.1 + m2 * 0.7 + m3 * 0.35 * (1.0 - smoothstep(4.0, 30.0, cam_d)));
 		vec3 rojizo = mix(vec3(1.0), vec3(1.07, 0.92, 0.84), smoothstep(-0.1, 0.45, m1));
@@ -433,7 +436,7 @@ void fragment() {
 			base_color *= 1.0 + a_d * sin(fase_d);
 			luz_extra += a_d * 1.6 * cos(fase_d) * alin;
 			// rizos finos (unos 3 m de juego) solo cerca de la cámara
-			if (cam_d < 22.0) {
+			if (calidad_shader >= 2 && cam_d < 22.0) {
 				float fase_r = dot(sphere_pos, viento_dir) * 700.0 + 2.6 * noise3d(sphere_pos * 260.0) + 1.2 * m1;
 				float a_r = suelo_rizos * zona * mask_w * (1.0 - smoothstep(5.0, 20.0, cam_d));
 				base_color *= 1.0 + a_r * sin(fase_r) * 0.8;
@@ -441,7 +444,7 @@ void fragment() {
 			}
 		}
 		// grietas de barro seco en las zonas llanas y bajas
-		if (cam_d < 16.0 && suelo_grietas > 0.0) {
+		if (calidad_shader >= 2 && cam_d < 16.0 && suelo_grietas > 0.0) {
 			float llano = 1.0 - smoothstep(0.05, 0.22, vertex_slope);
 			float playa = smoothstep(0.05, 0.4, noise3d(sphere_pos * 9.0 + vec3(3.0, 77.0, 21.0)) + 0.12);
 			float a_g = suelo_grietas * llano * playa * (1.0 - smoothstep(6.0, 16.0, cam_d));
