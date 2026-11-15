@@ -3498,11 +3498,48 @@ func _briefing_habla() -> void:
 		_hablar(str(msg_b["j"]), HudMision.corto(str(msg_b["t"]), 140))
 
 
+func _precalentar() -> void:
+	if _carga == null:
+		return
+	var nodo := Node3D.new()
+	nodo.position = Vector3(0.0, 0.6, 0.0)
+	_carga.add_child(nodo)
+	var vistos := {}
+	for id in lista:
+		if vistos.has(id):
+			continue
+		vistos[id] = true
+		var it := Node3D.new()
+		var r := RandomNumberGenerator.new()
+		r.seed = 1
+		Muestras.construir(it, str(id), 0.4, r)
+		it.scale = Vector3.ONE * 0.02
+		nodo.add_child(it)
+	var col: Color = DatosMarte.material(str(lista[0]))["color"] if lista.size() > 0 else Color.WHITE
+	_chispas(_up, col, 2, 0.02, 0.6)
+	var anillo := MeshInstance3D.new()
+	var toro := TorusMesh.new()
+	toro.rings = 8
+	toro.ring_segments = 3
+	anillo.mesh = toro
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.albedo_color = Color(col.r, col.g, col.b, 0.75)
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	anillo.material_override = mat
+	anillo.scale = Vector3.ONE * 0.02
+	nodo.add_child(anillo)
+	get_tree().create_timer(2.5).timeout.connect(func():
+		if is_instance_valid(nodo):
+			nodo.queue_free())
+
+
 func _cerrar_briefing() -> void:
 	if not _en_briefing:
 		return
 	_en_briefing = false
 	_hud.cerrar_briefing()
+	_precalentar()
 	_salida_iniciar()
 	_audio.callar()
 	_audio.resultado_escaner(1)
