@@ -1,6 +1,4 @@
 # **SPARTAN-II Video Game Nasa Space App Challenger 2026**
-[![Ver video SPARTAN-II](https://img.shields.io/badge/▶_Ver_Video-SPARTAN--II-red?style=for-the-badge)](https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/SPARTAN-II-Video-Game-V2.mp4)
-
 https://github.com/user-attachments/assets/fcda8ca2-a0b4-4aa0-ab11-415dbae62abb
 
 **Link Video Game SPARTAN-II**
