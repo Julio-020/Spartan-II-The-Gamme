@@ -24,8 +24,6 @@ Below you will find the access link to our video game:
   </tr>
 </table>
 
-
-
 ## **License:**
 MIT — use it however you like. If you build something cool with it, I'd love to hear about it.
 
