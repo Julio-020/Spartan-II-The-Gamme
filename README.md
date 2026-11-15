@@ -1,18 +1,13 @@
-# **SPARTAN-II-Video-Game-Nasa-Space-App-Challenger-2026**
-<p align="rigth">
-  <video src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/SPARTAN-II-Video-Game-V2.mp4" width=400">
-<p/>
+# **SPARTAN-II Video Game Nasa Space App Challenger 2026**
+
+  
+https://github.com/user-attachments/assets/fcda8ca2-a0b4-4aa0-ab11-415dbae62abb
+
 
 **Link Video Game SPARTAN-II**
 Below you will find the access link to our video game:
 
     spartan-ii-the-gamme.vercel.app
-
-<p align="rigth">
-  <video src="[https://github.com/user-attachments/assets/18251cb2-07d7-47b0-beba-debde0f0f32d](https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/SPARTAN-II-Video-Game-V1.mp4)" width="400" height="350"/>
-<p/>
-
-
 
 
 
