@@ -12,11 +12,15 @@ Below you will find the access link to our video game:
 <table>
   <tr>
     <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-1.jpeg" width="400"/></td>
-    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-7.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-9.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-8.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-3.jpeg" width="400"/></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-3.jpeg" width="400"/></td>
-    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-9.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-4.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-2.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-6.jpeg" width="400"/></td>
+    <td><img src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/screenshots/Capture-5.jpeg" width="400"/></td>
   </tr>
 </table>
 
