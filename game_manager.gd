@@ -10,6 +10,7 @@ const EscenaComite := preload("res://cinematicas/escena_comite.gd")
 const MarcoHUD := preload("res://interfaz/marco_hud.gd")
 const Transicion := preload("res://interfaz/transicion.gd")
 const Ajustes := preload("res://nucleo/ajustes.gd")
+const CalidadAuto := preload("res://nucleo/calidad_auto.gd")
 const AudioJuego := preload("res://sonido/audio_juego.gd")
 const IntroCinematica := preload("res://cinematicas/intro_cinematica.gd")
 const DatosMarte := preload("res://datos/datos_marte.gd")
@@ -121,6 +122,7 @@ func _ready() -> void:
 		return
 	_planet = planet_node
 	_cam = ship_player
+	add_to_group("gestor_juego")
 	for d in DatosMarte.MISIONES:
 		misiones.append(d)
 	EstiloUI.instalar_tema()
@@ -249,10 +251,24 @@ func _aplicar_progreso() -> void:
 		s.motivo_bloqueo = str(p["motivo"])
 
 
+const LOD_UMBRAL := [17.0, 13.0, 10.0]
+const LOD_PRESUPUESTO := [4, 6, 8]
+
+
+func aplicar_lod() -> void:
+	if _planet == null:
+		return
+	var c := clampi(Ajustes.calidad, 0, 2)
+	_planet.lod_threshold_deg = LOD_UMBRAL[c]
+	_planet.split_budget = LOD_PRESUPUESTO[c]
+	_planet._compute_lod_thresholds()
+
+
 func _crear_pantalla_titulo() -> void:
 	Ajustes.cargar()
 	Partidas.migrar_legado()
 	Ajustes.aplicar(get_viewport())
+	add_child(CalidadAuto.new())
 	_aplicar_progreso()
 
 	Idioma.aplicar()

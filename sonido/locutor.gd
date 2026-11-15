@@ -42,7 +42,7 @@ func _reproducir(w: AudioStreamWAV) -> void:
 
 
 func _process(_delta: float) -> void:
-	if _gen != null and _gen.avanzar(6000):
+	if _gen != null and _gen.avanzar(3000 if OS.has_feature("web") else 6000):
 		var w := _gen.resultado
 		_gen = null
 		_reproducir(w)

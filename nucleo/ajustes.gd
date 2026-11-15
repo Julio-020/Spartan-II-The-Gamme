@@ -73,16 +73,16 @@ static func aplicar_calidad(n: int) -> void:
 	match calidad:
 		0:
 			msaa = 0
-			escala_3d = 0.7
+			escala_3d = 0.65 if OS.has_feature("web") else 0.7
 			graficos_reales = false
 			calidad_ambiente = 0
 		1:
-			msaa = 1
+			msaa = 0 if OS.has_feature("web") else 1
 			escala_3d = 0.85
 			graficos_reales = true
 			calidad_ambiente = 1
 		_:
-			msaa = 2
+			msaa = 0 if OS.has_feature("web") else 2
 			escala_3d = 1.0
 			graficos_reales = true
 			calidad_ambiente = 2
@@ -241,6 +241,8 @@ static func restablecer() -> void:
 static func cargar() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(RUTA) != OK:
+		if OS.has_feature("web"):
+			aplicar_calidad(1)
 		return
 	for clave in CLAVES:
 		var actual: Variant = leer(clave)
@@ -269,12 +271,16 @@ static func aplicar(vp: Viewport) -> void:
 			DisplayServer.window_set_position(origen + (pant - tam) / 2)
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if vsync
 			else DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0 if vsync else 120
 	if vp != null:
 		match msaa:
 			1: vp.msaa_3d = Viewport.MSAA_2X
 			2: vp.msaa_3d = Viewport.MSAA_4X
 			_: vp.msaa_3d = Viewport.MSAA_DISABLED
 		vp.scaling_3d_scale = clampf(escala_3d, 0.5, 1.0)
+		var arbol := vp.get_tree()
+		if arbol != null:
+			arbol.call_group("gestor_juego", "aplicar_lod")
 
 
 static func asegurar_buses() -> void:
