@@ -1,5 +1,25 @@
-# Chunked LOD Planet
+# **SPARTAN-II-Video-Game-Nasa-Space-App-Challenger-2026**
+<p align="rigth">
+  <video src="https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/SPARTAN-II-Video-Game-V2.mp4" width=400">
+<p/>
 
+**Link Video Game SPARTAN-II**
+Below you will find the access link to our video game:
+
+    spartan-ii-the-gamme.vercel.app
+
+<p align="rigth">
+  <video src="[https://github.com/user-attachments/assets/18251cb2-07d7-47b0-beba-debde0f0f32d](https://github.com/Julio-020/Spartan-II-The-Gamme/blob/main/Assets/SPARTAN-II-Video-Game-V1.mp4)" width="400" height="350"/>
+<p/>
+
+
+
+
+
+
+
+
+# **Chunked LOD Planet:**
 A procedurally generated planet with dynamic level-of-detail, written entirely in GDScript for Godot 4.6. Designed as a **learning resource** — read this document first, then explore the code.
 
 ![Godot 4.6](https://img.shields.io/badge/Godot-4.6-blue) ![GDScript](https://img.shields.io/badge/language-GDScript-green) ![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)
@@ -8,11 +28,11 @@ A procedurally generated planet with dynamic level-of-detail, written entirely i
 where the atmospheric path is longest. Near the terminator (day/night boundary), the atmosphere takes on warm sunset tones.
 
 
-## License
-
+## **License:**
 MIT — use it however you like. If you build something cool with it, I'd love to hear about it.
 
-## Author
+
+## **Author:**
 
 <img src="media/cuberact-logo.png" alt="Cuberact" width="200">
 
@@ -21,13 +41,18 @@ I'm a solo indie developer building tools and games with Godot Engine under the 
 More projects at [cuberact.org](https://www.cuberact.org).
 
 
-## **Team members Spartans-II / Miembros del equipo Spartans-II:**
+
+
+## **Team members Spartans-II**
+<p align="rigth">
+  <img width="300" height="700" src="Assets/Emblem-Logo-Emblema-Sin-Fondo.png" alt="Logo-SPARTAN-II">
+</p>
+
 Copyright: © https://github.com/0Kelly087 Created by: © KELLY-087\
 Copyright: © https://github.com/GeraldMo-479 Created by: ©GERALD-479\
 Copyright: © https://github.com/RAYZER-117 Created by: ©RAYZER-117\
 Copyright: © https://github.com/Julio-020 Created by: ©JULIO-020\
 Copyright: © https://github.com/dg2c4 Created by: © DAID-204
-
 
 
 
